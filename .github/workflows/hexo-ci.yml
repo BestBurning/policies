@@ -17,7 +17,7 @@ jobs:
           node-version: '12'
       - name: Setup hexo
         env:
-          ACTION_DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
         run: |
           mkdir -p ~/.ssh/
           echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
@@ -25,8 +25,10 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           git config --global user.email "zhushuai026@gmail.com"
           git config --global user.name "Shea"
+      - run: |
           npm install hexo-cli -g
-          yarn install
+          npm install hexo-deployer-git --save
+          npm install
       - name: Hexo deploy
         run: |
           hexo clean
