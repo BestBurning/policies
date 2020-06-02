@@ -1,4 +1,4 @@
-name: Hexo-CI
+name: COS-CI
 
 on:
   push:
