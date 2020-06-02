@@ -99,7 +99,6 @@ theme: landscape
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
 - type: git
-  repo: 
-    github: https://github.com/BestBurning/policies.git
+  repo: git@github.com:BestBurning/policies.git
   branch: master
   message:  
