@@ -15,21 +15,24 @@ jobs:
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '12'
+      - name: Deploy Key Config
+        env:
+          ACTION_DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ACTION_DEPLOY_KEY}} > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: Git Config  
+        run: |
+          git config --global user.email "liwei2633@163.com"
+          git config --global user.name "monkeyWie"
       - name: Install
         run: |
           npm install hexo-cli -g
           npm install hexo-deployer-git --save
           npm install
-      # Deploy hexo blog website.
-      - name: Deploy
-        id: deploy
-        uses: sma11black/hexo-action@v1.0.1
-        with:
-          deploy_key: ${{ secrets.DEPLOY_KEY }}
-          user_name: Shea  # (or delete this input setting to use bot account)
-          user_email: zhushuai026@gmail.com  # (or delete this input setting to use bot account)
-          commit_msg: ${{ github.event.head_commit.message }}  # (or delete this input setting to use hexo default settings)
-      # Use the output from the `deploy` step(use for test action)
-      - name: Get the output
+      - name: Hexo Deploy
         run: |
-          echo "${{ steps.deploy.outputs.notify }}"
+          hexo clean
+          hexo d

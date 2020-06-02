@@ -1,0 +1,35 @@
+name: Hexo-CI
+
+on:
+  push:
+    branches:
+      - hexo
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: hexo
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+      - name: Install
+        run: |
+          npm install hexo-cli -g
+          npm install hexo-deployer-git --save
+          npm install
+      # Deploy hexo blog website.
+      - name: Deploy
+        id: deploy
+        uses: sma11black/hexo-action@v1.0.1
+        with:
+          deploy_key: ${{ secrets.DEPLOY_KEY }}
+          user_name: Shea  # (or delete this input setting to use bot account)
+          user_email: zhushuai026@gmail.com  # (or delete this input setting to use bot account)
+          commit_msg: ${{ github.event.head_commit.message }}  # (or delete this input setting to use hexo default settings)
+      # Use the output from the `deploy` step(use for test action)
+      - name: Get the output
+        run: |
+          echo "${{ steps.deploy.outputs.notify }}"
