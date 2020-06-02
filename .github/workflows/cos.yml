@@ -3,7 +3,7 @@ name: COS-CI
 on:
   push:
     branches:
-      - master
+      - hexo
 jobs:
   build:
     runs-on: ubuntu-latest
